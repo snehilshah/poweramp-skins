@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="lg_skin_name">Liquid Glass</string>
+    <string name="lg_skin_name_dark">Liquid Glass Dark</string>
+    <string name="lg_skin_author">Your Name</string>
+    <string name="lg_skin_description">Floating translucent controls over calm content, inspired by Apple\'s Liquid Glass and Human Interface Guidelines.</string>
+    <string name="lg_opt_variant">Glass variant</string>
+    <string name="lg_opt_variant_summary">Regular suits text-heavy controls. Clear suits colorful album art.</string>
+    <string name="lg_opt_regular">Regular</string>
+    <string name="lg_opt_regular_summary">Balanced translucency and legibility</string>
+    <string name="lg_opt_clear">Clear</string>
+    <string name="lg_opt_clear_summary">More transparent, with a subtle dimming layer</string>
+    <string name="lg_opt_reduce">Reduce transparency</string>
+    <string name="lg_opt_reduce_summary">Solid surfaces with a hairline border for maximum legibility</string>
+</resources>

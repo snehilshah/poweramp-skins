@@ -1,0 +1,16 @@
+# Gradle / Android build output
+.gradle/
+build/
+local.properties
+.kotlin/
+
+# Downloaded by scripts/fetch-poweramp-resources.sh
+poweramp-resources.zip
+
+# IDE
+.idea/
+*.iml
+
+# Signing keys never go in git
+*.jks
+*.keystore

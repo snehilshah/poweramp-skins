@@ -1,0 +1,81 @@
+plugins {
+    id 'com.android.application'
+}
+
+// Poweramp resources the skin links against (for com.maxmpz.audioplayer:* references).
+// scripts/fetch-poweramp-resources.sh downloads them; local.properties poweramp.apk=<path> overrides.
+def localProps = new Properties()
+def lpFile = rootProject.file('local.properties')
+if (lpFile.exists()) lpFile.withInputStream { localProps.load(it) }
+def powerampApk = rootProject.file(localProps.getProperty('poweramp.apk') ?: 'poweramp-resources.zip')
+if (!powerampApk.exists()) {
+    throw new GradleException("Poweramp resources not found: ${powerampApk}\nRun scripts/fetch-poweramp-resources.sh")
+}
+
+// Keeps resource IDs (the skin styles in skins.xml) the same across builds, so users' skin options persist.
+def stableIds = file('stable-ids.txt')
+
+// Release signing comes from the environment (CI secrets). Without it, release builds use the
+// debug key: fine for trying out locally, but such an APK can't update one installed from a release.
+def keystore = System.getenv('SKIN_KEYSTORE')
+
+android {
+    namespace = 'io.github.poweramp.skins.liquidglass'
+    compileSdk = 36
+
+    defaultConfig {
+        applicationId = 'io.github.poweramp.skins.liquidglass'
+        minSdk = 21
+        targetSdk = 36
+        // CI passes these; see .github/workflows/release.yml.
+        versionCode = (findProperty('skin.versionCode') ?: '1') as int
+        versionName = findProperty('skin.versionName') ?: '1.0'
+    }
+
+    // Link against Poweramp's resources as package 0x80, reusing the IDs in stable-ids.txt.
+    androidResources {
+        additionalParameters += ["--stable-ids", stableIds.absolutePath,
+                                 "--package-id", "0x80",
+                                 "-I", powerampApk.absolutePath]
+    }
+
+    signingConfigs {
+        if (keystore) {
+            release {
+                storeFile = file(keystore)
+                storePassword = System.getenv('SKIN_KEYSTORE_PASSWORD')
+                keyAlias = System.getenv('SKIN_KEY_ALIAS')
+                keyPassword = System.getenv('SKIN_KEY_PASSWORD')
+            }
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled = false
+            signingConfig = keystore ? signingConfigs.release : signingConfigs.debug
+        }
+    }
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+    lint {
+        abortOnError = false
+    }
+}
+
+// AGP writes the IDs it assigned (including ones for new styles) to its own file and ignores
+// --emit-ids, so copy that back into stable-ids.txt. Commit stable-ids.txt when it changes.
+tasks.matching { it.name ==~ /process\w+Resources/ }.configureEach { task ->
+    task.inputs.file(stableIds)
+    task.doLast {
+        def variant = task.name - 'process' - 'Resources'
+        def emitted = layout.buildDirectory.file("intermediates/stable_resource_ids_file/" +
+                "${variant.uncapitalize()}/${task.name}/stableIds.txt").get().asFile
+        if (emitted.exists()) {
+            def ids = emitted.readLines().sort().join('\n') + '\n'
+            if (stableIds.text != ids) stableIds.text = ids
+        }
+    }
+}

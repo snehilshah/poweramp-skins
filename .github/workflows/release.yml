@@ -1,0 +1,161 @@
+# Every push to main builds the skins and publishes a GitHub Release with
+# one APK per skin (liquid-glass-1.0.N.apk) and its .sha256. N is the number
+# of commits on main, so versions only go up; the notes list the commits since
+# the previous release. Pushes that only touch Markdown don't release.
+#
+# Signing: these repository secrets sign every release with the same key
+# (needed to install updates over an earlier version):
+#   RELEASE_KEYSTORE_BASE64  base64 of the .jks file
+#   RELEASE_KEYSTORE_PASSWORD, RELEASE_KEY_ALIAS, RELEASE_KEY_PASSWORD
+# Without them it fails: an APK signed with another key can't update the skin.
+#
+# Only official tools: GitHub's own actions and gh, Gradle's wrapper checked
+# against the checksum Gradle publishes, and Poweramp's resources from the
+# official powerampapi repo checked against a pinned checksum.
+#
+# Cache: Gradle's caches and the Poweramp resources, restored on every run and
+# saved when their key changes (a build file or the pinned resources changed).
+name: Release
+
+on:
+  push:
+    branches: [main]
+    paths-ignore: ["**.md"]
+  workflow_dispatch:
+
+# One release at a time, in push order.
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      # Full history, for the version (commit count) and the notes.
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Gradle wrapper checksum
+        run: scripts/check-gradle-wrapper.sh
+
+      - name: Version
+        run: |
+          COUNT=$(git rev-list --count HEAD)
+          echo "VERSION=1.0.$COUNT" >> "$GITHUB_ENV"
+          echo "VERSION_CODE=$COUNT" >> "$GITHUB_ENV"
+
+      - name: Release notes
+        run: |
+          PREVIOUS=$(git tag --list 'v*' --sort=-v:refname | head -1)
+          RANGE="${PREVIOUS:+$PREVIOUS..}HEAD"
+          {
+            echo "## Changes"
+            echo
+            git log --no-merges --format='- %s' "$RANGE"
+          } > release-notes.md
+          cat release-notes.md
+
+      - uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: "25"
+
+      # The runner ships an Android SDK; AGP downloads any missing platform
+      # or build tools itself once the licences are accepted.
+      - name: Android SDK licences
+        run: |
+          SDKMANAGER=$(ls -d "$ANDROID_HOME"/cmdline-tools/*/bin/sdkmanager | sort -V | tail -1)
+          yes | "$SDKMANAGER" --licenses > /dev/null || true
+
+      - uses: actions/cache@v6
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+            !~/.gradle/caches/build-cache-1
+            !~/.gradle/caches/**/*.lock
+          key: gradle-${{ hashFiles('**/*.gradle', 'gradle.properties', 'gradle/wrapper/gradle-wrapper.properties') }}
+          restore-keys: gradle-
+
+      - uses: actions/cache@v6
+        with:
+          path: poweramp-resources.zip
+          key: poweramp-resources-${{ hashFiles('scripts/fetch-poweramp-resources.sh') }}
+
+      - name: Poweramp resources
+        run: scripts/fetch-poweramp-resources.sh
+
+      - name: Release keystore
+        env:
+          KEYSTORE_BASE64: ${{ secrets.RELEASE_KEYSTORE_BASE64 }}
+          KEYSTORE_PASSWORD: ${{ secrets.RELEASE_KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.RELEASE_KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.RELEASE_KEY_PASSWORD }}
+        run: |
+          if [ -z "$KEYSTORE_BASE64" ]; then
+            echo "::error::No release keystore secret: the APK couldn't update an installed skin."
+            exit 1
+          fi
+          echo "$KEYSTORE_BASE64" | base64 -d > "$RUNNER_TEMP/release.jks"
+          {
+            echo "SKIN_KEYSTORE=$RUNNER_TEMP/release.jks"
+            echo "SKIN_KEYSTORE_PASSWORD=$KEYSTORE_PASSWORD"
+            echo "SKIN_KEY_ALIAS=$KEY_ALIAS"
+            echo "SKIN_KEY_PASSWORD=$KEY_PASSWORD"
+          } >> "$GITHUB_ENV"
+
+      - name: Build
+        run: |
+          ./gradlew --no-daemon assembleRelease -Pskin.versionName="$VERSION" -Pskin.versionCode="$VERSION_CODE"
+          mkdir dist
+          for APK in */build/outputs/apk/release/*-release.apk; do
+            SKIN="${APK%%/*}"
+            cp "$APK" "dist/$SKIN-$VERSION.apk"
+            (cd dist && sha256sum "$SKIN-$VERSION.apk" > "$SKIN-$VERSION.apk.sha256")
+          done
+          ls -l dist
+
+      # New styles get new IDs; they must be committed to stay the same.
+      - name: Stable IDs committed
+        run: |
+          if ! git diff --quiet -- '*/stable-ids.txt'; then
+            echo "::warning::stable-ids.txt changed: commit the new lines below, or users' skin options may reset when IDs shift."
+            git diff -- '*/stable-ids.txt'
+          fi
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: release
+          path: |
+            dist/
+            release-notes.md
+          if-no-files-found: error
+          retention-days: 1
+
+  # GitHub's own CLI publishes it, on a plain runner where gh is installed.
+  publish:
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v8
+        with:
+          name: release
+
+      - name: Publish
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          VERSION=$(ls dist/*.apk | head -1 | sed 's|.*-\([0-9.]*\)\.apk$|\1|')
+          gh release create "v$VERSION" --target "$GITHUB_SHA" \
+            --title "Poweramp skins $VERSION" --notes-file release-notes.md \
+            dist/*

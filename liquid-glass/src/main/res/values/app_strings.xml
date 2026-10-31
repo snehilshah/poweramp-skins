@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Liquid Glass Skin</string>
+    <string name="app_info">Open Poweramp, go to Settings &gt; Skin, and choose Liquid Glass.</string>
+    <string name="open_poweramp">Open Poweramp</string>
+    <string name="poweramp_missing">Poweramp is not installed.</string>
+</resources>

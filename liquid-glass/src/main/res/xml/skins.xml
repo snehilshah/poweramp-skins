@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<skins targetBuild="1007">
+    <skin
+        name="@string/lg_skin_name"
+        author="@string/lg_skin_author"
+        description="@string/lg_skin_description"
+        style="@style/LiquidGlass"
+        darkMode="@style/LiquidGlassDark"
+        forceGlobalOptions="true"
+        allowNewPadding="true"
+    >
+        <radio
+            key="lg_variant"
+            name="@string/lg_opt_variant"
+            summary="@string/lg_opt_variant_summary"
+            defaultValue=""
+        >
+            <option name="@string/lg_opt_regular" summary="@string/lg_opt_regular_summary" overlapStyle=""/>
+            <option name="@string/lg_opt_clear" summary="@string/lg_opt_clear_summary" overlapStyle="@style/LiquidGlass_Clear"/>
+        </radio>
+        <!-- Declared after the variant radio so it is applied later and wins -->
+        <option
+            key="lg_reduce_transparency"
+            name="@string/lg_opt_reduce"
+            summary="@string/lg_opt_reduce_summary"
+            overlapStyle="@style/LiquidGlass_ReduceTransparency"
+            checkedByDefault="false"
+        />
+    </skin>
+
+    <skin
+        name="@string/lg_skin_name_dark"
+        author="@string/lg_skin_author"
+        description="@string/lg_skin_description"
+        style="@style/LiquidGlassDark"
+        lightMode="@style/LiquidGlass"
+        forceGlobalOptions="true"
+        allowNewPadding="true"
+    >
+        <radio
+            key="lg_variant"
+            name="@string/lg_opt_variant"
+            summary="@string/lg_opt_variant_summary"
+            defaultValue=""
+        >
+            <option name="@string/lg_opt_regular" summary="@string/lg_opt_regular_summary" overlapStyle=""/>
+            <option name="@string/lg_opt_clear" summary="@string/lg_opt_clear_summary" overlapStyle="@style/LiquidGlass_Clear"/>
+        </radio>
+        <!-- Declared after the variant radio so it is applied later and wins -->
+        <option
+            key="lg_reduce_transparency"
+            name="@string/lg_opt_reduce"
+            summary="@string/lg_opt_reduce_summary"
+            overlapStyle="@style/LiquidGlass_ReduceTransparency"
+            checkedByDefault="false"
+        />
+    </skin>
+</skins>
