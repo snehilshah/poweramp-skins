@@ -19,8 +19,9 @@ Pushes that only change `.md` files don't make a release.
 
 All under `liquid-glass/src/main/res/`:
 
-- `values/liquid_glass_styles.xml`: the skin itself: styles overriding Poweramp's (`com.maxmpz.audioplayer:*`).
-- `drawable/lg_*.xml`: glass shapes for bars, buttons and pills, in clear/regular/opaque, light/dark.
+- `values/liquid_glass_styles.xml`: the skin itself. The top of each theme (`LiquidGlass` light,
+  `LiquidGlassDark` dark) holds the glass colors: change those to retune the whole look.
+- `drawable/lg_*.xml`: the glass shapes (bar, capsule, button, label), drawn from those colors.
 - `xml/skins.xml`: the skins and options Poweramp lists.
 - `values/liquid_glass_strings.xml`: names and descriptions shown in Poweramp.
 

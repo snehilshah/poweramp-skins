@@ -3,10 +3,42 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools"
     tools:ignore="ResourceCycle, NewApi">
 
-    <!-- Light Liquid Glass. All overridden Poweramp styles derive from the Poweramp styles (required by the SDK). -->
-    <style name="LiquidGlass" parent="com.maxmpz.audioplayer:style/Base_ActivityTheme_Default">
+    <!--
+    Liquid Glass: frosted glass on the controls and navigation that float over content
+    (navbar and the menu it expands into, panels, floating buttons, play button). Content stays calm.
 
-        <!-- HIG: concentric, rounded shapes. Bars 28dp (capsule at 56dp height), content tiles 12dp, main art 28dp. -->
+    Each skin derives from Poweramp's own light/dark theme, so every Poweramp color (popups, chips, lists, dialogs)
+    matches the mode and text keeps its contrast. The glass is drawn by drawable/lg_*.xml from the colors below:
+      LiquidGlass_fill_*   body of the glass per variant (Regular / Clear / Reduce Transparency)
+      LiquidGlass_sheen    light catching the top half
+      LiquidGlass_rim      bright inner edge
+      LiquidGlass_edge     hairline separating the glass from what's behind
+    Keep fills at ~65% opacity or more: text and icons sit on them and must stay readable over any album art.
+    -->
+
+    <!-- ===== Light ===== -->
+    <style name="LiquidGlass" parent="com.maxmpz.audioplayer:style/ActivityTheme_White">
+        <item name="LiquidGlass_fill_regular">#DBF9F9FB</item>
+        <item name="LiquidGlass_fill_clear">#ADF9F9FB</item>
+        <item name="LiquidGlass_fill_opaque">#FFF9F9FB</item>
+        <item name="LiquidGlass_fill">?LiquidGlass_fill_regular</item>
+        <item name="LiquidGlass_sheen">#B3FFFFFF</item>
+        <item name="LiquidGlass_rim">#CCFFFFFF</item>
+        <item name="LiquidGlass_edge">#1F000000</item>
+        <item name="LiquidGlass_ripple">#1F000000</item>
+        <item name="LiquidGlass_label">#8C000000</item>
+
+        <item name="com.maxmpz.audioplayer:colorBgPrimary">#F2F2F7</item>
+        <item name="com.maxmpz.audioplayer:colorBgNavbar">#F9F9FB</item>
+        <item name="com.maxmpz.audioplayer:colorBgTransparentNavbar">?LiquidGlass_fill</item>
+        <item name="com.maxmpz.audioplayer:navbar_elevation">2dp</item>
+
+        <!-- Play/pause, prev/next: frosted white disc, dark icon -->
+        <item name="com.maxmpz.audioplayer:colorPlayButtonsBg">#EBFFFFFF</item>
+        <item name="com.maxmpz.audioplayer:colorPlayButtonsStroke">#33000000</item>
+        <item name="com.maxmpz.audioplayer:colorPlayButtonsTint">#000000</item>
+
+        <!-- Same in LiquidGlassDark: keep in sync -->
         <item name="com.maxmpz.audioplayer:corners_navbar">28dp</item>
         <item name="com.maxmpz.audioplayer:corners_popup">20dp</item>
         <item name="com.maxmpz.audioplayer:corners_medium">14dp</item>
@@ -30,27 +62,6 @@
         <item name="com.maxmpz.audioplayer:corners_aa_tracks_small">8dp</item>
         <item name="com.maxmpz.audioplayer:corners_aa_scene_aa">28dp</item>
         <item name="com.maxmpz.audioplayer:corners_miniplayer_aa">12dp</item>
-
-        <!-- Content layer: calm, near-flat (Apple system grouped background in light). -->
-        <item name="com.maxmpz.audioplayer:colorBgPrimary">#F2F2F7</item>
-        <item name="com.maxmpz.audioplayer:colorStroke">#26000000</item>
-        <item name="com.maxmpz.audioplayer:colorIconLessContrast">#8A8A8E</item>
-        <item name="com.maxmpz.audioplayer:colorNavbarIcons">#1C1C1E</item>
-        <item name="com.maxmpz.audioplayer:navbar_elevation">4dp</item>
-
-        <!-- Glass surfaces for this mode -->
-        <item name="LiquidGlass_bar_regular">@drawable/lg_bar_regular_light</item>
-        <item name="LiquidGlass_bar_clear">@drawable/lg_bar_clear_light</item>
-        <item name="LiquidGlass_bar_opaque">@drawable/lg_bar_opaque_light</item>
-        <item name="LiquidGlass_button_regular">@drawable/lg_button_regular_light</item>
-        <item name="LiquidGlass_button_clear">@drawable/lg_button_clear_light</item>
-        <item name="LiquidGlass_button_opaque">@drawable/lg_button_opaque_light</item>
-
-        <!-- Current variant (Regular by default). Skin options re-point these. -->
-        <item name="LiquidGlass_bar">?LiquidGlass_bar_regular</item>
-        <item name="LiquidGlass_button">?LiquidGlass_button_regular</item>
-
-        <!-- FUNCTIONAL LAYER ONLY: navigation + selection + search + floating header/toolbar buttons. -->
         <item name="com.maxmpz.audioplayer:Navbar">@style/LiquidGlass_Navbar</item>
         <item name="com.maxmpz.audioplayer:Navbar_scene_navbar_1line_sheet">@style/LiquidGlass_Navbar_scene_navbar_1line_sheet</item>
         <item name="com.maxmpz.audioplayer:Navbar_scene_navbar_2lines">@style/LiquidGlass_Navbar_scene_navbar_2lines</item>
@@ -70,89 +81,141 @@
         <item name="com.maxmpz.audioplayer:TopMetaInfoLabel">@style/LiquidGlass_TopMetaInfoLabel</item>
     </style>
 
-    <!-- Dark Liquid Glass. NOTE: only the colors below are overridden - verify against reference_resources/values/default-styles.xml. -->
-    <style name="LiquidGlassDark" parent="LiquidGlass">
-        <item name="com.maxmpz.audioplayer:colorBgPrimary">#000000</item>
-        <item name="com.maxmpz.audioplayer:colorStroke">#38FFFFFF</item>
-        <item name="com.maxmpz.audioplayer:colorIconLessContrast">#8E8E93</item>
-        <item name="com.maxmpz.audioplayer:colorNavbarIcons">#FFFFFF</item>
-        <item name="android:textColorPrimary">#FFFFFF</item>
-        <item name="android:textColorSecondary">#99EBEBF5</item>
-        <item name="LiquidGlass_bar_regular">@drawable/lg_bar_regular_dark</item>
-        <item name="LiquidGlass_bar_clear">@drawable/lg_bar_clear_dark</item>
-        <item name="LiquidGlass_bar_opaque">@drawable/lg_bar_opaque_dark</item>
-        <item name="LiquidGlass_button_regular">@drawable/lg_button_regular_dark</item>
-        <item name="LiquidGlass_button_clear">@drawable/lg_button_clear_dark</item>
-        <item name="LiquidGlass_button_opaque">@drawable/lg_button_opaque_dark</item>
+    <!-- ===== Dark ===== -->
+    <style name="LiquidGlassDark" parent="com.maxmpz.audioplayer:style/ActivityTheme_Black">
+        <item name="LiquidGlass_fill_regular">#D91C1C1E</item>
+        <item name="LiquidGlass_fill_clear">#A61C1C1E</item>
+        <item name="LiquidGlass_fill_opaque">#FF1C1C1E</item>
+        <item name="LiquidGlass_fill">?LiquidGlass_fill_regular</item>
+        <item name="LiquidGlass_sheen">#24FFFFFF</item>
+        <item name="LiquidGlass_rim">#1FFFFFFF</item>
+        <item name="LiquidGlass_edge">#33FFFFFF</item>
+        <item name="LiquidGlass_ripple">#33FFFFFF</item>
+        <item name="LiquidGlass_label">#8C000000</item>
+
+        <item name="com.maxmpz.audioplayer:colorBgPrimary">#1C1C1E</item>
+        <item name="com.maxmpz.audioplayer:colorBgNavbar">#1C1C1E</item>
+        <item name="com.maxmpz.audioplayer:colorBgTransparentNavbar">?LiquidGlass_fill</item>
+        <item name="com.maxmpz.audioplayer:colorBgLight">#2C2C2E</item>
+        <item name="com.maxmpz.audioplayer:colorBgCheckedLight">#3A3A3C</item>
+        <!-- No shadow: invisible on black, and it would muddy the translucent glass -->
+        <item name="com.maxmpz.audioplayer:navbar_elevation">0dp</item>
+
+        <!-- Play/pause, prev/next: frosted graphite disc with a light rim, white icon -->
+        <item name="com.maxmpz.audioplayer:colorPlayButtonsBg">#E62C2C2E</item>
+        <item name="com.maxmpz.audioplayer:colorPlayButtonsStroke">#59FFFFFF</item>
+        <item name="com.maxmpz.audioplayer:colorPlayButtonsTint">#FFFFFF</item>
+
+        <!-- Same in LiquidGlass: keep in sync -->
+        <item name="com.maxmpz.audioplayer:corners_navbar">28dp</item>
+        <item name="com.maxmpz.audioplayer:corners_popup">20dp</item>
+        <item name="com.maxmpz.audioplayer:corners_medium">14dp</item>
+        <item name="com.maxmpz.audioplayer:corners_medium_plus">16dp</item>
+        <item name="com.maxmpz.audioplayer:corners_searchbar">28dp</item>
+        <item name="com.maxmpz.audioplayer:corners_mini">10dp</item>
+        <item name="com.maxmpz.audioplayer:corners_large">24dp</item>
+        <item name="com.maxmpz.audioplayer:corners_small">8dp</item>
+        <item name="com.maxmpz.audioplayer:corners_aa_tracks">12dp</item>
+        <item name="com.maxmpz.audioplayer:corners_aa_albums">12dp</item>
+        <item name="com.maxmpz.audioplayer:corners_aa_other">matchHeight</item>
+        <item name="com.maxmpz.audioplayer:corners_aa_tracks_zoomed">12dp</item>
+        <item name="com.maxmpz.audioplayer:corners_aa_albums_zoomed">12dp</item>
+        <item name="com.maxmpz.audioplayer:corners_aa_other_zoomed">matchHeight</item>
+        <item name="com.maxmpz.audioplayer:corners_aa_tracks_grid">16dp</item>
+        <item name="com.maxmpz.audioplayer:corners_aa_albums_grid">16dp</item>
+        <item name="com.maxmpz.audioplayer:corners_aa_other_grid">matchHeight</item>
+        <item name="com.maxmpz.audioplayer:corners_aa_tracks_grid_zoomed">16dp</item>
+        <item name="com.maxmpz.audioplayer:corners_aa_albums_grid_zoomed">16dp</item>
+        <item name="com.maxmpz.audioplayer:corners_aa_other_grid_zoomed">matchHeight</item>
+        <item name="com.maxmpz.audioplayer:corners_aa_tracks_small">8dp</item>
+        <item name="com.maxmpz.audioplayer:corners_aa_scene_aa">28dp</item>
+        <item name="com.maxmpz.audioplayer:corners_miniplayer_aa">12dp</item>
+        <item name="com.maxmpz.audioplayer:Navbar">@style/LiquidGlass_Navbar</item>
+        <item name="com.maxmpz.audioplayer:Navbar_scene_navbar_1line_sheet">@style/LiquidGlass_Navbar_scene_navbar_1line_sheet</item>
+        <item name="com.maxmpz.audioplayer:Navbar_scene_navbar_2lines">@style/LiquidGlass_Navbar_scene_navbar_2lines</item>
+        <item name="com.maxmpz.audioplayer:SelectionMenuSubcontainer">@style/LiquidGlass_SelectionMenuSubcontainer</item>
+        <item name="com.maxmpz.audioplayer:SelectionMenuSubcontainer_scene_selection_menu">@style/LiquidGlass_SelectionMenuSubcontainer_scene_selection_menu</item>
+        <item name="com.maxmpz.audioplayer:TopActionModeBar">@style/LiquidGlass_TopActionModeBar</item>
+        <item name="com.maxmpz.audioplayer:TopSearchPanel">@style/LiquidGlass_TopSearchPanel</item>
+        <item name="com.maxmpz.audioplayer:VolumePanelFrame">@style/LiquidGlass_VolumePanelFrame</item>
+        <item name="com.maxmpz.audioplayer:ItemHeaderShuffleButton">@style/LiquidGlass_ItemHeaderShuffleButton</item>
+        <item name="com.maxmpz.audioplayer:ItemHeaderPlayButton">@style/LiquidGlass_ItemHeaderPlayButton</item>
+        <item name="com.maxmpz.audioplayer:ItemHeaderSelectButton">@style/LiquidGlass_ItemHeaderSelectButton</item>
+        <item name="com.maxmpz.audioplayer:ItemHeaderSearchButton">@style/LiquidGlass_ItemHeaderSearchButton</item>
+        <item name="com.maxmpz.audioplayer:ItemTrackMenu_scene_header">@style/LiquidGlass_ItemTrackMenu_scene_header</item>
+        <item name="com.maxmpz.audioplayer:ItemTrackMenu_scene_bottom_toolbar">@style/LiquidGlass_ItemTrackMenu_scene_bottom_toolbar</item>
+        <item name="com.maxmpz.audioplayer:ItemTextMenu_scene_bottom_toolbar">@style/LiquidGlass_ItemTrackMenu_scene_bottom_toolbar</item>
+        <item name="com.maxmpz.audioplayer:TopMetaInfo">@style/LiquidGlass_TopMetaInfo</item>
+        <item name="com.maxmpz.audioplayer:TopMetaInfoLabel">@style/LiquidGlass_TopMetaInfoLabel</item>
     </style>
 
-    <!-- ===== Functional-layer styles ===== -->
+    <!-- ===== Glass surfaces ===== -->
     <style name="LiquidGlass_Navbar" parent="com.maxmpz.audioplayer:Navbar">
-        <item name="android:background">?LiquidGlass_bar</item>
+        <item name="android:background">@drawable/lg_bar</item>
         <item name="com.maxmpz.audioplayer:applyViewParams">true</item>
     </style>
+    <!-- The navbar expands into these for the main menu: same glass, so the menu stays readable -->
     <style name="LiquidGlass_Navbar_scene_navbar_1line_sheet" parent="com.maxmpz.audioplayer:Navbar_scene_navbar_1line_sheet">
-        <item name="android:background">?LiquidGlass_bar</item>
+        <item name="android:background">@drawable/lg_bar</item>
         <item name="com.maxmpz.audioplayer:applyViewParams">true</item>
     </style>
     <style name="LiquidGlass_Navbar_scene_navbar_2lines" parent="com.maxmpz.audioplayer:Navbar_scene_navbar_2lines">
-        <item name="android:background">?LiquidGlass_bar</item>
+        <item name="android:background">@drawable/lg_bar</item>
         <item name="com.maxmpz.audioplayer:applyViewParams">true</item>
     </style>
     <style name="LiquidGlass_SelectionMenuSubcontainer" parent="com.maxmpz.audioplayer:SelectionMenuSubcontainer">
-        <item name="android:background">?LiquidGlass_bar</item>
+        <item name="android:background">@drawable/lg_bar</item>
     </style>
     <style name="LiquidGlass_SelectionMenuSubcontainer_scene_selection_menu" parent="com.maxmpz.audioplayer:SelectionMenuSubcontainer_scene_selection_menu">
-        <item name="android:background">?LiquidGlass_bar</item>
+        <item name="android:background">@drawable/lg_bar</item>
         <item name="com.maxmpz.audioplayer:applyViewParams">true</item>
     </style>
     <style name="LiquidGlass_TopActionModeBar" parent="com.maxmpz.audioplayer:TopActionModeBar">
-        <item name="android:background">?LiquidGlass_bar</item>
+        <item name="android:background">@drawable/lg_bar</item>
     </style>
     <style name="LiquidGlass_TopSearchPanel" parent="com.maxmpz.audioplayer:TopSearchPanel">
-        <item name="android:background">?LiquidGlass_bar</item>
+        <item name="android:background">@drawable/lg_bar</item>
     </style>
     <style name="LiquidGlass_VolumePanelFrame" parent="com.maxmpz.audioplayer:VolumePanelFrame">
-        <item name="android:background">?LiquidGlass_bar</item>
+        <item name="android:background">@drawable/lg_bar</item>
     </style>
 
-    <!-- Floating header buttons sit over cover art = controls above content, so glass is appropriate -->
+    <!-- Floating buttons over cover art -->
     <style name="LiquidGlass_ItemHeaderShuffleButton" parent="com.maxmpz.audioplayer:ItemHeaderShuffleButton">
-        <item name="android:background">?LiquidGlass_button</item>
+        <item name="android:background">@drawable/lg_button</item>
     </style>
     <style name="LiquidGlass_ItemHeaderPlayButton" parent="com.maxmpz.audioplayer:ItemHeaderPlayButton">
-        <item name="android:background">?LiquidGlass_button</item>
+        <item name="android:background">@drawable/lg_button</item>
     </style>
     <style name="LiquidGlass_ItemHeaderSelectButton" parent="com.maxmpz.audioplayer:ItemHeaderSelectButton">
-        <item name="android:background">?LiquidGlass_button</item>
+        <item name="android:background">@drawable/lg_button</item>
     </style>
     <style name="LiquidGlass_ItemHeaderSearchButton" parent="com.maxmpz.audioplayer:ItemHeaderSearchButton">
-        <item name="android:background">?LiquidGlass_button</item>
+        <item name="android:background">@drawable/lg_button</item>
     </style>
     <style name="LiquidGlass_ItemTrackMenu_scene_header" parent="com.maxmpz.audioplayer:ItemTrackMenu_scene_header">
-        <item name="android:background">?LiquidGlass_button</item>
+        <item name="android:background">@drawable/lg_button</item>
         <item name="com.maxmpz.audioplayer:applyViewParams">true</item>
     </style>
     <style name="LiquidGlass_ItemTrackMenu_scene_bottom_toolbar" parent="com.maxmpz.audioplayer:ItemTrackMenu_scene_bottom_toolbar">
-        <item name="android:background">?LiquidGlass_button</item>
+        <item name="android:background">@drawable/lg_button</item>
         <item name="com.maxmpz.audioplayer:applyViewParams">true</item>
     </style>
 
-    <!-- Meta chip over album art: dark scrim keeps white text legible on any art -->
+    <!-- Title/artist over album art: dark glass label keeps white text readable on any cover -->
     <style name="LiquidGlass_TopMetaInfo" parent="com.maxmpz.audioplayer:TopMetaInfo">
-        <item name="com.maxmpz.audioplayer:lineBackground">@drawable/lg_scrim</item>
+        <item name="com.maxmpz.audioplayer:lineBackground">@drawable/lg_label</item>
     </style>
     <style name="LiquidGlass_TopMetaInfoLabel" parent="com.maxmpz.audioplayer:TopMetaInfoLabel">
         <item name="android:textColor">#FFFFFF</item>
     </style>
 
-    <!-- ===== Skin option overlays (applied on top of the skin theme) ===== -->
+    <!-- ===== Skin options (applied on top of the light/dark theme) ===== -->
     <style name="LiquidGlass_Clear">
-        <item name="LiquidGlass_bar">?LiquidGlass_bar_clear</item>
-        <item name="LiquidGlass_button">?LiquidGlass_button_clear</item>
+        <item name="LiquidGlass_fill">?LiquidGlass_fill_clear</item>
     </style>
     <style name="LiquidGlass_ReduceTransparency">
-        <item name="LiquidGlass_bar">?LiquidGlass_bar_opaque</item>
-        <item name="LiquidGlass_button">?LiquidGlass_button_opaque</item>
+        <item name="LiquidGlass_fill">?LiquidGlass_fill_opaque</item>
+        <item name="com.maxmpz.audioplayer:colorPlayButtonsBg">?LiquidGlass_fill_opaque</item>
     </style>
 </resources>

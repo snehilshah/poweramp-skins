@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- "Current" glass surfaces used by styles. Variant options re-point these. -->
-    <attr name="LiquidGlass_bar" format="reference"/>
-    <attr name="LiquidGlass_button" format="reference"/>
+    <!-- Glass colors the drawables use. The light/dark theme sets them; variant options re-point LiquidGlass_fill. -->
+    <attr name="LiquidGlass_fill" format="color"/>
+    <attr name="LiquidGlass_sheen" format="color"/>
+    <attr name="LiquidGlass_rim" format="color"/>
+    <attr name="LiquidGlass_edge" format="color"/>
+    <attr name="LiquidGlass_ripple" format="color"/>
+    <attr name="LiquidGlass_label" format="color"/>
 
-    <!-- Per-variant surfaces, defined by the light/dark theme. -->
-    <attr name="LiquidGlass_bar_regular" format="reference"/>
-    <attr name="LiquidGlass_bar_clear" format="reference"/>
-    <attr name="LiquidGlass_bar_opaque" format="reference"/>
-    <attr name="LiquidGlass_button_regular" format="reference"/>
-    <attr name="LiquidGlass_button_clear" format="reference"/>
-    <attr name="LiquidGlass_button_opaque" format="reference"/>
+    <!-- Fill per variant, set by the light/dark theme. -->
+    <attr name="LiquidGlass_fill_regular" format="color"/>
+    <attr name="LiquidGlass_fill_clear" format="color"/>
+    <attr name="LiquidGlass_fill_opaque" format="color"/>
 </resources>

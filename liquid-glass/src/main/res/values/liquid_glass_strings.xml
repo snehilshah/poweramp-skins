@@ -5,11 +5,11 @@
     <string name="lg_skin_author">Your Name</string>
     <string name="lg_skin_description">Floating translucent controls over calm content, inspired by Apple\'s Liquid Glass and Human Interface Guidelines.</string>
     <string name="lg_opt_variant">Glass variant</string>
-    <string name="lg_opt_variant_summary">Regular suits text-heavy controls. Clear suits colorful album art.</string>
+    <string name="lg_opt_variant_summary">How much of what\'s behind shows through the glass</string>
     <string name="lg_opt_regular">Regular</string>
-    <string name="lg_opt_regular_summary">Balanced translucency and legibility</string>
+    <string name="lg_opt_regular_summary">Frosted glass, easiest to read</string>
     <string name="lg_opt_clear">Clear</string>
-    <string name="lg_opt_clear_summary">More transparent, with a subtle dimming layer</string>
+    <string name="lg_opt_clear_summary">More see-through, still readable</string>
     <string name="lg_opt_reduce">Reduce transparency</string>
-    <string name="lg_opt_reduce_summary">Solid surfaces with a hairline border for maximum legibility</string>
+    <string name="lg_opt_reduce_summary">Solid surfaces, glass edges kept</string>
 </resources>
