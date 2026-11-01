@@ -46,7 +46,14 @@
             <option name="@string/lg_opt_regular" summary="@string/lg_opt_regular_summary" overlapStyle=""/>
             <option name="@string/lg_opt_clear" summary="@string/lg_opt_clear_summary" overlapStyle="@style/LiquidGlass_Clear"/>
         </radio>
-        <!-- Declared after the variant radio so it is applied later and wins -->
+        <option
+            key="lg_midnight"
+            name="@string/lg_opt_midnight"
+            summary="@string/lg_opt_midnight_summary"
+            overlapStyle="@style/LiquidGlassDark_Midnight"
+            checkedByDefault="false"
+        />
+        <!-- Declared after the variant radio and Midnight blue so it is applied later and wins -->
         <option
             key="lg_reduce_transparency"
             name="@string/lg_opt_reduce"

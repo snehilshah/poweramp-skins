@@ -12,4 +12,6 @@
     <string name="lg_opt_clear_summary">More see-through, still readable</string>
     <string name="lg_opt_reduce">Reduce transparency</string>
     <string name="lg_opt_reduce_summary">Solid surfaces, glass edges kept</string>
+    <string name="lg_opt_midnight">Midnight blue</string>
+    <string name="lg_opt_midnight_summary">Blue-grey glass and a blue seek bar</string>
 </resources>

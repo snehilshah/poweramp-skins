@@ -4,7 +4,7 @@ Skins for [Poweramp](https://powerampapp.com/) v3. Each skin is a small Android 
 
 | Skin | Folder | What it is |
 | --- | --- | --- |
-| Liquid Glass | [liquid-glass/](liquid-glass/) | Glass on controls and navigation only (per Apple's HIG). Light and dark skins, Regular/Clear variant, "Reduce transparency" option. |
+| Liquid Glass | [liquid-glass/](liquid-glass/) | Glass on controls and navigation only (per Apple's HIG). Light and dark skins, Regular/Clear variant, "Reduce transparency" option, "Midnight blue" option (dark). |
 
 ## Getting a build
 
